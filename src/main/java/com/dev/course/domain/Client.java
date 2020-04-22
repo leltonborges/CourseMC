@@ -1,6 +1,7 @@
 package com.dev.course.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,14 +29,16 @@ public class Client implements Serializable{
 	private String cpfOuCnpj;
 	private Integer typeClient;
 	
-	
-	@OneToMany(mappedBy = "client")
 	@JsonManagedReference
+	@OneToMany(mappedBy = "client")
 	private List<Address> Addresses;
 	
 	@ElementCollection
 	@CollectionTable(name = "TELEFONE")
 	private Set<String> phones = new HashSet<>();
+	
+	@OneToMany(mappedBy = "client")
+	private List<Request> requests = new ArrayList<>();
 	
 	public Client() {
 		// TODO Auto-generated constructor stub
@@ -106,6 +109,14 @@ public class Client implements Serializable{
 		this.phones = phones;
 	}
 
+	public List<Request> getRequests() {
+		return requests;
+	}
+
+	public void setRequests(List<Request> requests) {
+		this.requests = requests;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

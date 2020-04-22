@@ -1,5 +1,7 @@
 package com.dev.course;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +13,21 @@ import com.dev.course.domain.Address;
 import com.dev.course.domain.Category;
 import com.dev.course.domain.City;
 import com.dev.course.domain.Client;
+import com.dev.course.domain.Payment;
+import com.dev.course.domain.PaymentCard;
+import com.dev.course.domain.PaymentWithBoleto;
 import com.dev.course.domain.Product;
+import com.dev.course.domain.Request;
 import com.dev.course.domain.State;
+import com.dev.course.domain.enums.StatusPayment;
 import com.dev.course.domain.enums.TypeClient;
 import com.dev.course.repositories.AddressRepository;
 import com.dev.course.repositories.CategoryRepository;
 import com.dev.course.repositories.CityRepository;
 import com.dev.course.repositories.ClientRepository;
+import com.dev.course.repositories.PaymentRepository;
 import com.dev.course.repositories.ProductRepository;
+import com.dev.course.repositories.RequestRepository;
 import com.dev.course.repositories.StateRepository;
 
 @SpringBootApplication
@@ -26,22 +35,20 @@ public class CoursoMcApplication implements CommandLineRunner{
 
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
 	@Autowired
 	private ProductRepository productRepository;
-	
 	@Autowired
 	private CityRepository cityRepository;
-	
 	@Autowired 
 	private StateRepository stateRepository;
-	
 	@Autowired
 	private ClientRepository clientRepository;
-	
 	@Autowired
 	private AddressRepository addressRepository;
-	
+	@Autowired
+	private RequestRepository requestRepository;
+	@Autowired
+	private PaymentRepository paymentRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CoursoMcApplication.class, args);
@@ -91,6 +98,21 @@ public class CoursoMcApplication implements CommandLineRunner{
 		clientRepository.saveAll(Arrays.asList(cli1));
 		
 		addressRepository.saveAll(Arrays.asList(add1, add2));
+		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Request rq1 = new Request(null, sdf.parse("2019/12/12 11:34"), cli1, add1);
+		Request rq2 = new Request(null, sdf.parse("2020/03/17 10:45"), cli1, add2);
+		
+		Payment pay1 = new PaymentCard(null, StatusPayment.SETTLED, rq1, 3);
+		rq1.setPayment(pay1);
+		
+		Payment pay2 = new PaymentWithBoleto(null,StatusPayment.PENDING, rq2, sdf.parse("2020/01/10 12:30"), null);
+		rq2.setPayment(pay2);
+		cli1.getRequests().addAll(Arrays.asList(rq1, rq2));
+		
+		requestRepository.saveAll(Arrays.asList(rq1, rq2));
+		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
 		
 	}
 }
