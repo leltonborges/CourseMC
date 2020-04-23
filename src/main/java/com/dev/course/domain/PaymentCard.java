@@ -17,6 +17,12 @@ public class PaymentCard extends Payment{
 		super(id, status, request);
 		this.numberPlots = numberPlots;
 	}
-	
-	
+
+	public Integer getNumberPlots() {
+		return numberPlots;
+	}
+
+	public void setNumberPlots(Integer numberPlots) {
+		this.numberPlots = numberPlots;
+	}
 }

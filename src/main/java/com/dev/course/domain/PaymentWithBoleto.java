@@ -21,6 +21,19 @@ public class PaymentWithBoleto extends Payment{
 		this.datePaymento = datePayment;
 	}
 
+	public Date getDateExpiration() {
+		return dateExpiration;
+	}
 
-	
+	public void setDateExpiration(Date dateExpiration) {
+		this.dateExpiration = dateExpiration;
+	}
+
+	public Date getDatePaymento() {
+		return datePaymento;
+	}
+
+	public void setDatePaymento(Date datePaymento) {
+		this.datePaymento = datePaymento;
+	}
 }

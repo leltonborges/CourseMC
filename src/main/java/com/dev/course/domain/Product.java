@@ -2,7 +2,9 @@ package com.dev.course.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -32,6 +35,9 @@ public class Product implements Serializable{
 				inverseJoinColumns = @JoinColumn(name="category_id", referencedColumnName = "ID"))
 	private List<Category> categories = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "id.product")
+	private Set<ItemRequest> itens = new HashSet<ItemRequest>();
+	
 	public Product() {
 	}
 
@@ -40,6 +46,14 @@ public class Product implements Serializable{
 		this.id = id;
 		this.name = name;
 		this.price = price;
+	}
+	
+	public List<Request> getRequests(){
+		List<Request> lists = new ArrayList<Request>();
+		for(ItemRequest item: itens) {
+			lists.add(item.getRequest());
+		}
+		return lists;
 	}
 
 	public Integer getId() {
@@ -74,6 +88,13 @@ public class Product implements Serializable{
 		this.categories = categories;
 	}
 
+	public Set<ItemRequest> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemRequest> itens) {
+		this.itens = itens;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -104,4 +125,5 @@ public class Product implements Serializable{
 			return false;
 		return true;
 	}
+
 }

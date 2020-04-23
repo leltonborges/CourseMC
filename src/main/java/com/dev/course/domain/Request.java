@@ -2,6 +2,8 @@ package com.dev.course.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,9 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
-import jdk.jfr.MemoryAddress;
 
 @Entity
 public class Request implements Serializable{
@@ -33,6 +34,9 @@ public class Request implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "ADDRESS_DELIVERY_ID")
 	private Address AddressDelivery;
+	
+	@OneToMany(mappedBy = "id.request")
+	private Set<ItemRequest> itens = new HashSet<ItemRequest>();
 	
 	public Request() {
 	}
@@ -85,6 +89,13 @@ public class Request implements Serializable{
 		AddressDelivery = addressDelivery;
 	}
 
+	public Set<ItemRequest> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemRequest> itens) {
+		this.itens = itens;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -109,4 +120,5 @@ public class Request implements Serializable{
 			return false;
 		return true;
 	}
+
 }

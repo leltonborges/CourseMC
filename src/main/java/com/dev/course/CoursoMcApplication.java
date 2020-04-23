@@ -13,6 +13,7 @@ import com.dev.course.domain.Address;
 import com.dev.course.domain.Category;
 import com.dev.course.domain.City;
 import com.dev.course.domain.Client;
+import com.dev.course.domain.ItemRequest;
 import com.dev.course.domain.Payment;
 import com.dev.course.domain.PaymentCard;
 import com.dev.course.domain.PaymentWithBoleto;
@@ -25,6 +26,7 @@ import com.dev.course.repositories.AddressRepository;
 import com.dev.course.repositories.CategoryRepository;
 import com.dev.course.repositories.CityRepository;
 import com.dev.course.repositories.ClientRepository;
+import com.dev.course.repositories.ItemRequestRepository;
 import com.dev.course.repositories.PaymentRepository;
 import com.dev.course.repositories.ProductRepository;
 import com.dev.course.repositories.RequestRepository;
@@ -49,6 +51,8 @@ public class CoursoMcApplication implements CommandLineRunner{
 	private RequestRepository requestRepository;
 	@Autowired
 	private PaymentRepository paymentRepository;
+	@Autowired
+	private ItemRequestRepository itemRequestRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CoursoMcApplication.class, args);
@@ -114,5 +118,17 @@ public class CoursoMcApplication implements CommandLineRunner{
 		requestRepository.saveAll(Arrays.asList(rq1, rq2));
 		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
 		
+		ItemRequest ir1 = new ItemRequest(rq1, p1, 0.00, 1, 2000.00);
+		ItemRequest ir2 = new ItemRequest(rq1, p3, 0.00, 2, 80.00);
+		ItemRequest ir3 = new ItemRequest(rq2, p2, 100.00, 1, 800.00);
+		
+		rq1.getItens().addAll(Arrays.asList(ir1, ir2));
+		rq2.getItens().addAll(Arrays.asList(ir3));
+		
+		p1.getItens().addAll(Arrays.asList(ir1));
+		p2.getItens().addAll(Arrays.asList(ir3));
+		p3.getItens().addAll(Arrays.asList(ir2));
+		
+		itemRequestRepository.saveAll(Arrays.asList(ir1, ir2, ir3));
 	}
 }
